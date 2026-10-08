@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { PATHS } from '@/routes/paths';
+import { Footer } from '@/components/common/Footer';
 import { useAuthStore } from '@/stores/authStore';
 import { BUNDLES } from '@/constants/bundles';
 
@@ -37,6 +38,7 @@ export function HomePage() {
   }, []);
 
   return (
+    <>
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
       {/* Nav */}
       <Box
@@ -193,5 +195,7 @@ export function HomePage() {
         </Button>
       </Container>
     </Box>
+    <Footer appName="Website Video" />
+  </>
   );
 }
