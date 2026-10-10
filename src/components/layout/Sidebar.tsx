@@ -62,6 +62,11 @@ export function Sidebar({ open, onClose, variant }: SidebarProps) {
         [`& .MuiDrawer-paper`]: {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
+          position: variant === 'permanent' ? 'static' : undefined,
+          height: variant === 'permanent' ? '100%' : undefined,
+          borderRadius: 0,
+          borderRight: '1px solid',
+          borderColor: 'divider',
         },
       }}
     >
