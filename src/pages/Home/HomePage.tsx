@@ -1,201 +1,186 @@
 import { useEffect } from 'react';
-import { Box, Button, Container, Typography, Grid, Paper, Chip } from '@mui/material';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
-  RocketLaunch as RocketIcon,
-  SmartDisplay as PlayIcon,
-  Star as StarIcon,
+  Box, Container, Typography, Button, Card, CardContent, Chip, Divider,
+} from '@mui/material';
+import {
+  Bolt as BoltIcon,
+  LiveTv as LiveTvIcon,
+  Link as LinkIcon,
+  AutoAwesome as AutoIcon,
+  Schedule as ScheduleIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import { PATHS } from '@/routes/paths';
 import { Footer } from '@/components/common/Footer';
-import { useAuthStore } from '@/stores/authStore';
-import { BUNDLES } from '@/constants/bundles';
+import { PricingTiers } from '@/components/marketing/PricingTiers';
+import { HowItWorks } from '@/components/marketing/HowItWorks';
+import { Faq } from '@/components/marketing/Faq';
 
-const FEATURES = [
-  {
-    icon: <PlayIcon />,
-    title: 'Landing page hero videos',
-    desc: 'Turn your website into a scroll-stopping animated hero in seconds.',
-  },
-  {
-    icon: <RocketIcon />,
-    title: 'Product demos',
-    desc: 'Showcase your product with concise, animated explainer videos.',
-  },
-  {
-    icon: <StarIcon />,
-    title: 'Social-ready clips',
-    desc: 'Repurpose one idea into short-form cuts ready for any channel.',
-  },
-];
+/**
+ * Website Video landing. Design: one orchestrated hero entrance; quiet,
+ * disciplined sections after it. No scroll-triggered reveals, no single-word
+ * headline accenting, sentence-case kickers throughout.
+ */
+const rise = {
+  hidden: { opacity: 0, y: 20 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: 0.08 * i, ease: 'easeOut' as const },
+  }),
+};
 
 export function HomePage() {
-  const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [params] = useSearchParams();
 
   useEffect(() => {
-    document.title = 'Website Video — AI videos from your website URL';
-  }, []);
+    const ref = params.get('ref');
+    if (ref) localStorage.setItem('vs_ref', ref);
+  }, [params]);
 
   return (
     <>
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-      {/* Nav */}
       <Box
-        component="header"
         sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-          backdropFilter: 'blur(12px)',
-          bgcolor: (t) =>
-            t.palette.mode === 'dark' ? 'rgba(11,11,20,0.7)' : 'rgba(255,255,255,0.7)',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
+          background: (theme) =>
+            theme.palette.mode === 'dark'
+              ? 'radial-gradient(ellipse 90% 65% at 50% -10%, rgba(59,130,246,0.22), transparent)'
+              : 'radial-gradient(ellipse 90% 65% at 50% -10%, rgba(59,130,246,0.10), transparent)',
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', py: 1.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box
-                component="img"
-                src="/favicon.svg"
-                alt="Website Video"
-                sx={{ width: 34, height: 34 }}
+          <Box sx={{ py: { xs: 7, md: 11 }, maxWidth: 780 }}>
+            <motion.div variants={rise} initial="hidden" animate="show" custom={0}>
+              <Chip
+                label="AI videos from your website URL"
+                color="primary"
+                variant="outlined"
+                sx={{ mb: 3 }}
               />
-              <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-                Website Video
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button
-                variant="text"
-                onClick={() => navigate(PATHS.BUNDLES)}
-                sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+            </motion.div>
+            <motion.div variants={rise} initial="hidden" animate="show" custom={1}>
+              <Typography
+                variant="h2"
+                gutterBottom
+                sx={{ fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.08 }}
               >
-                Pricing
-              </Button>
-              {isAuthenticated ? (
-                <Button variant="contained" onClick={() => navigate(PATHS.DASHBOARD)}>
-                  Dashboard
+                Paste your URL. Get videos that sell it.
+              </Typography>
+            </motion.div>
+            <motion.div variants={rise} initial="hidden" animate="show" custom={2}>
+              <Typography variant="h6" color="text.secondary" paragraph sx={{ lineHeight: 1.65, fontWeight: 400 }}>
+                Website Video turns any website into narrated marketing videos — one-off bundles or a daily landing campaign for your homepage and socials.
+              </Typography>
+            </motion.div>
+            <motion.div variants={rise} initial="hidden" animate="show" custom={3}>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 3 }}>
+                <Button variant="contained" size="large" component={RouterLink} to={PATHS.REGISTER}>
+                  Make my video
                 </Button>
-              ) : (
-                <Button variant="contained" onClick={() => navigate(PATHS.LOGIN)}>
+                <Button variant="outlined" size="large" component={RouterLink} to={PATHS.LOGIN}>
                   Sign in
                 </Button>
-              )}
-            </Box>
+              </Box>
+            </motion.div>
+            <motion.div variants={rise} initial="hidden" animate="show" custom={4}>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2.5 }}>
+                From $50 for 10 videos. Render once, publish everywhere.
+              </Typography>
+            </motion.div>
           </Box>
         </Container>
       </Box>
 
-      {/* Hero */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-        <Grid container spacing={4} alignItems="center">
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Chip label="AI videos from your website URL" color="primary" variant="outlined" sx={{ mb: 2 }} />
-            <Typography
-              variant="h2"
-              component="h1"
-              sx={{ mb: 2, fontSize: { xs: '2.2rem', md: '3.2rem' } }}
-            >
-              Your website becomes your video — in minutes
-            </Typography>
-            <Typography variant="h6" component="p" color="text.secondary" sx={{ mb: 3, fontWeight: 400 }}>
-              Paste your product's URL. We study your site and generate animated,
-              on-brand videos your customers actually watch.
-            </Typography>
-
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              <Button variant="contained" size="large" onClick={() => navigate(PATHS.REGISTER)}>
-                Get started
-              </Button>
-              <Button variant="outlined" size="large" onClick={() => navigate(PATHS.BUNDLES)}>
-                See pricing
-              </Button>
-            </Box>
-
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
-              From {BUNDLES[0].priceUsd} {/* e.g. $50 for 10 videos */}
-            </Typography>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 4,
-                background: (t) =>
-                  `linear-gradient(135deg, ${t.palette.primary.main} 0%, ${t.palette.secondary.main} 100%)`,
-                color: '#fff',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <PlayIcon />
-                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                  Sample render
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  aspectRatio: '16/9',
-                  borderRadius: 3,
-                  background: 'rgba(0,0,0,0.25)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <PlayIcon sx={{ fontSize: 64 }} />
-              </Box>
-              <Typography variant="body2" sx={{ mt: 2, opacity: 0.9 }}>
-                Drop in your URL → AI generates a hero demo for your product.
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-
-      {/* Features */}
-      <Box sx={{ py: { xs: 5, md: 8 }, bgcolor: (t) => (t.palette.mode === 'dark' ? 'background.paper' : '#ffffff') }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" textAlign="center" sx={{ mb: 4 }}>
-            Why teams use Website Video
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 8 }}>
+          <Typography variant="h4" fontWeight={800} sx={{ mb: 1 }}>
+            Bundles and campaigns
           </Typography>
-          <Grid container spacing={3}>
-            {FEATURES.map((f) => (
-              <Grid size={{ xs: 12, md: 4 }} key={f.title}>
-                <Paper elevation={0} sx={{ p: 3, height: '100%' }}>
-                  <Box sx={{ color: 'primary.main', mb: 1.5, display: 'flex' }}>{f.icon}</Box>
-                  <Typography variant="h6" sx={{ mb: 1 }}>
-                    {f.title}
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            One-off videos when you need them, daily presence when you want it.
+          </Typography>
+          <Box sx={{ display: 'grid', gap: 2.5, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
+            {[
+              { Icon: BoltIcon, t: 'URL to video', b: '$50 for 10 videos, $100 for 30 — generated from your URL, yours to keep.' },
+              { Icon: LiveTvIcon, t: 'Daily campaigns', b: 'Hero loops, demos, and cutdowns for your product, rendered on autopilot. $149 a month.' },
+            ].map((s) => (
+              <Card key={s.t} sx={{ height: '100%' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ color: 'primary.main', mb: 1 }}>
+                    <s.Icon sx={{ fontSize: 36 }} />
+                  </Box>
+                  <Typography variant="h6" fontWeight={700} gutterBottom>
+                    {s.t}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {f.desc}
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+                    {s.b}
                   </Typography>
-                </Paper>
-              </Grid>
+                </CardContent>
+              </Card>
             ))}
-          </Grid>
-        </Container>
-      </Box>
+          </Box>
+        </Box>
 
-      {/* CTA */}
-      <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          Ready to turn your website into video?
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          One-time bundles. No subscription. Your videos never expire.
-        </Typography>
-        <Button variant="contained" size="large" onClick={() => navigate(PATHS.REGISTER)}>
-          Create your account
-        </Button>
+        <Box sx={{ mb: 8 }}>
+          <Typography variant="h4" fontWeight={800} sx={{ mb: 3 }}>
+            How it works
+          </Typography>
+          <HowItWorks
+            steps={[
+              { Icon: LinkIcon, title: 'Connect', body: 'Paste a URL, get videos. Connect accounts to publish landing campaigns daily.' },
+              { Icon: AutoIcon, title: 'Brief', body: 'Describe the vibe once: funny moments, high-energy plays, chill highlights. Set the pace — up to 5 posts a day.' },
+              { Icon: ScheduleIcon, title: 'Wake up to posts', body: 'AI renders each slot once and publishes it to every account you selected. Pause or cancel anytime.' },
+            ]}
+          />
+        </Box>
+
+        <Box sx={{ mb: 8 }}>
+          <Typography variant="h4" fontWeight={800} sx={{ mb: 1 }}>
+            Pricing
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            One subscription covers both services and unlimited campaigns.
+          </Typography>
+          <PricingTiers
+            tiers={[
+              { id: 'base', name: 'Starter', price: '$149', accounts: 20, blurb: 'Landing campaigns, daily presence.', featured: true },
+              { id: 'agency50', name: 'Agency 50', price: '$499', accounts: 50, blurb: 'For growing clip networks.' },
+              { id: 'agency150', name: 'Agency 150', price: '$999', accounts: 150, blurb: 'For large-scale operations.' },
+            ]}
+          />
+        </Box>
+
+        <Box sx={{ mb: 8 }}>
+          <Typography variant="h4" fontWeight={800} sx={{ mb: 3 }}>
+            Questions
+          </Typography>
+          <Faq
+            items={[
+              { q: 'How many campaigns can I run?', a: 'As many as you want. Your subscription covers the app, not the campaign.' },
+              { q: 'How many accounts can I connect?', a: '20 across YouTube, TikTok, Instagram, and Facebook on Starter. Agency tiers raise it to 50 or 150.' },
+              { q: 'Is it really 5 posts a day?', a: 'Yes — up to 5 fresh renders daily, each published to all your selected accounts. A 4-account campaign publishes 20 posts from 5 renders.' },
+              { q: 'Do I keep the videos?', a: 'Every render is downloadable from your dashboard, forever — whether or not you stay subscribed.' },
+              { q: 'What if a platform blocks a post?', a: 'Missed posts re-queue automatically. Chronic blocks pause that account (never the whole campaign) and tell you why.' },
+              { q: 'Can I cancel?', a: 'Anytime, in one click. Content already posted stays posted; renders stop at period end. See the Refund Policy.' },
+            ]}
+          />
+        </Box>
+
+        <Box sx={{ mb: 8 }}>
+          <Divider sx={{ mb: 4 }} />
+          <Typography variant="h5" fontWeight={800} sx={{ mb: 1 }}>
+            Ready when your homepage is
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2.5 }}>
+            Set up a campaign in minutes. Tomorrow's clips are already scheduled.
+          </Typography>
+          <Button variant="contained" size="large" component={RouterLink} to={PATHS.REGISTER}>
+            Make my video
+          </Button>
+        </Box>
       </Container>
-    </Box>
-    <Footer appName="Website Video" />
-  </>
+      <Footer appName="Website Video" />
+    </>
   );
 }
