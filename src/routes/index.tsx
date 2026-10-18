@@ -13,6 +13,9 @@ import { DashboardPage } from '@/pages/Dashboard/DashboardPage';
 import { GeneratePage } from '@/pages/Generate/GeneratePage';
 import { VideosPage } from '@/pages/Videos/VideosPage';
 import { BundlesPage } from '@/pages/Bundles/BundlesPage';
+import CampaignsPage from '@/pages/Campaigns/CampaignsPage';
+import NewCampaignPage from '@/pages/Campaigns/NewCampaignPage';
+import CampaignDetailPage from '@/pages/Campaigns/CampaignDetailPage';
 import { SettingsPage } from '@/pages/Settings/SettingsPage';
 import { NotFoundPage } from '@/pages/NotFound/NotFoundPage';
 
@@ -70,6 +73,30 @@ export const router = createBrowserRouter([
         element: (
           <ErrorBoundary>
             <BundlesPage />
+          </ErrorBoundary>
+        ),
+      },
+      {
+        path: PATHS.CAMPAIGNS,
+        element: (
+          <ErrorBoundary>
+            <CampaignsPage />
+          </ErrorBoundary>
+        ),
+      },
+      {
+        path: PATHS.CAMPAIGNS_NEW,
+        element: (
+          <ErrorBoundary>
+            <NewCampaignPage />
+          </ErrorBoundary>
+        ),
+      },
+      {
+        path: PATHS.CAMPAIGN_DETAIL,
+        element: (
+          <ErrorBoundary>
+            <CampaignDetailPage />
           </ErrorBoundary>
         ),
       },

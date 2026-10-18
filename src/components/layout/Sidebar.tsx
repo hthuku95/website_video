@@ -14,6 +14,8 @@ import {
   Dashboard as DashboardIcon,
   AddCircleOutline as GenerateIcon,
   PlayCircleOutline as VideosIcon,
+  Campaign as CampaignsIcon,
+  Add as NewCampaignIcon,
   LocalOffer as PricingIcon,
   Settings as SettingsIcon,
   ChevronLeft as CollapseIcon,
@@ -41,6 +43,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', icon: <DashboardIcon />, path: PATHS.DASHBOARD },
   { label: 'Generate Video', icon: <GenerateIcon />, path: PATHS.GENERATE },
   { label: 'My Videos', icon: <VideosIcon />, path: PATHS.VIDEOS },
+  { label: 'Campaigns', icon: <CampaignsIcon />, path: PATHS.CAMPAIGNS },
+  { label: 'New Campaign', icon: <NewCampaignIcon />, path: PATHS.CAMPAIGNS_NEW },
   { label: 'Pricing', icon: <PricingIcon />, path: PATHS.BUNDLES },
 ];
 
