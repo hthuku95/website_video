@@ -28,6 +28,22 @@ interface PaymentModalProps {
 
 export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
   const [tab, setTab] = useState<0 | 1>(0);
+  const [payMethods, setPayMethods] = useState<string[]>(['paypal']);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/payment-methods`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` },
+        });
+        const data = await res.json();
+        if (!cancelled && data?.success && Array.isArray(data.methods)) setPayMethods(data.methods);
+      } catch { /* keep default */ }
+    })();
+    return () => { cancelled = true; };
+  }, [open]);
   const [busy, setBusy] = useState(false);
   const [busyMessage, setBusyMessage] = useState('');
   const [error, setError] = useState('');
@@ -131,17 +147,19 @@ export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
           </Typography>
         </Box>
 
-        <Tabs
-          value={tab}
-          onChange={(_, v: 0 | 1) => {
-            setTab(v);
-            setError('');
-          }}
-          sx={{ mb: 2 }}
-        >
-          <Tab label="PayPal / Card" />
-          <Tab label="USDC (Base)" />
-        </Tabs>
+        {payMethods.includes('usdc') ? (
+          <Tabs
+            value={tab}
+            onChange={(_, v: 0 | 1) => {
+              setTab(v);
+              setError('');
+            }}
+            sx={{ mb: 2 }}
+          >
+            <Tab label="PayPal / Card" disabled={!payMethods.includes('paypal')} />
+            <Tab label="USDC (Base)" disabled={!payMethods.includes('usdc')} />
+          </Tabs>
+        ) : null}
 
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -149,7 +167,7 @@ export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
           </Alert>
         )}
 
-        {tab === 0 ? (
+        {(!payMethods.includes('usdc') || tab === 0) && payMethods.includes('paypal') ? (
           <Box>
             {sdkError ? (
               <Alert severity="warning">{sdkError}</Alert>
@@ -162,7 +180,7 @@ export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
               <Box ref={paypalContainerRef} sx={{ minHeight: 90 }} />
             )}
           </Box>
-        ) : (
+        ) : payMethods.includes('usdc') ? (
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Pay {bundle.priceUsd} USDC on the Base network. You'll approve an
