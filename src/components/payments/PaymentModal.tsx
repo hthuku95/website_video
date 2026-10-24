@@ -44,6 +44,10 @@ export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
 
     setBusyMessage('Ready to pay');
 
+    // Clear any previously rendered buttons (effect can re-run when `loaded`
+    // flips to true after the dialog is already open).
+    if (paypalContainerRef.current) paypalContainerRef.current.innerHTML = '';
+
     window.paypal
       .Buttons({
         style: { layout: 'vertical', shape: 'rect' },
