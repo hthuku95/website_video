@@ -215,7 +215,7 @@ export function PaymentModal({ open, onClose, bundle }: PaymentModalProps) {
               </Button>
             )}
           </Box>
-        )}
+        ) : null}
 
         <Divider sx={{ my: 2 }} />
         <Typography variant="caption" color="text.secondary">
