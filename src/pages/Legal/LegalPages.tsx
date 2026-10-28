@@ -36,9 +36,9 @@ export function TermsPage() {
   return (
     <LegalShell title="Terms of Service" updated="October 2026">
       <Section title="1. The service">
-        Website Video (“we”, “us”) provides AI-generated marketing videos from website URLs: one-off bundles as
-        well as landing-page video campaigns with narration, delivered for
-        your own channels. Output is AI-generated content based on your brief and source
+        Website Video (“we”, “us”) provides AI-generated videos of any type from website URLs — how-to, marketing,
+        product demos, explainers, testimonials, and more — as one-off bundles as well as landing-page video
+        campaigns with narration, delivered for your own channels. Output is AI-generated content based on your brief and source
         selection — creative direction remains yours, and you are responsible
         for the accounts and sources you connect.
       </Section>

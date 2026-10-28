@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { campaignService } from '@/services/campaign.service';
 
-const SERVICES = [{ value: 'landing_page', label: 'Website Video', hint: 'Landing page heroes & product demos' }] as const;
+const SERVICES = [{ value: 'landing_page', label: 'Website Video', hint: 'Any video type from your website URL: how-to, marketing, product demo, explainer, testimonial' }] as const;
 
 function todayStr(offsetDays = 0) {
   const d = new Date();

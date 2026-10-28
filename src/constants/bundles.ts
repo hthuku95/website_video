@@ -14,7 +14,7 @@ export const BUNDLES: Bundle[] = [
     description: '10 AI-generated videos from your website URL',
     features: [
       '10 videos generated from your site',
-      'Landing page hero & product demos',
+      'Any video type: how-to, marketing, product demo, explainer, testimonial',
       '4K-ready animated output',
       'Download & reuse anywhere',
     ],
@@ -29,7 +29,7 @@ export const BUNDLES: Bundle[] = [
     features: [
       'Up to 30 videos generated from your site',
       'Best value per video',
-      'Landing page hero & product demos',
+      'Any video type: how-to, marketing, product demo, explainer, testimonial',
       'Priority rendering queue',
       'Download & reuse anywhere',
     ],
