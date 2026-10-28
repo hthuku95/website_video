@@ -70,7 +70,7 @@ export function HomePage() {
             </motion.div>
             <motion.div variants={rise} initial="hidden" animate="show" custom={2}>
               <Typography variant="h6" color="text.secondary" paragraph sx={{ lineHeight: 1.65, fontWeight: 400 }}>
-                Website Video turns any website into AI-generated videos of any kind — how-to, marketing, product demos, explainers, testimonials, and more. The AI crawls your site, learns your business, and produces the videos you ask for — one-off bundles or a daily landing campaign for your homepage and socials.
+                Website Video turns any website into AI-animated videos of any kind — how-to, marketing, product demos, explainers, testimonials, and more. The AI crawls your site, learns your business, and produces animated videos you ask for — one-off bundles or a daily landing campaign for your homepage and socials.
               </Typography>
             </motion.div>
             <motion.div variants={rise} initial="hidden" animate="show" custom={3}>
