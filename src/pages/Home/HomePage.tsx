@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { getFeatureFlags } from '@/services/features.service';
 import { motion } from 'framer-motion';
 import {
   Box, Container, Typography, Button, Card, CardContent, Chip, Divider,
@@ -32,6 +33,12 @@ const rise = {
 };
 
 export function HomePage() {
+  const [campaignsOff, setCampaignsOff] = useState(false);
+
+  useEffect(() => {
+    getFeatureFlags().then((f) => setCampaignsOff(!f.campaigns_enabled));
+  }, []);
+
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -70,7 +77,9 @@ export function HomePage() {
             </motion.div>
             <motion.div variants={rise} initial="hidden" animate="show" custom={2}>
               <Typography variant="h6" color="text.secondary" paragraph sx={{ lineHeight: 1.65, fontWeight: 400 }}>
-                Website Video turns any website into AI-animated videos of any kind — how-to, marketing, product demos, explainers, testimonials, and more. The AI crawls your site, learns your business, and produces animated videos you ask for — one-off bundles or a daily landing campaign for your homepage and socials.
+                {campaignsOff
+    ? 'Website Video turns any website into AI-animated videos of any kind — how-to, marketing, product demos, explainers, testimonials, and more. The AI crawls your site, learns your business, and produces the videos you order as one-time bundles.'
+    : "Website Video turns any website into AI-animated videos of any kind — how-to, marketing, product demos, explainers, testimonials, and more. The AI crawls your site, learns your business, and produces animated videos you ask for — one-off bundles or a daily landing campaign for your homepage and socials."}
               </Typography>
             </motion.div>
             <motion.div variants={rise} initial="hidden" animate="show" custom={3}>
@@ -103,7 +112,9 @@ export function HomePage() {
           <Box sx={{ display: 'grid', gap: 2.5, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
             {[
               { Icon: BoltIcon, t: 'URL to video', b: '$50 for 10 videos, $100 for 30 — generated from your URL, yours to keep.' },
-              { Icon: LiveTvIcon, t: 'Daily campaigns', b: 'Any video type for your product — how-to, marketing, demos, explainers, testimonials — rendered on autopilot and posted daily. $149 a month.' },
+              campaignsOff
+            ? { Icon: LiveTvIcon, t: 'Daily campaigns — coming soon', b: 'Any video type for your product rendered on autopilot and posted daily. $149 a month, arriving soon. Order a one-time bundle today.' }
+            : { Icon: LiveTvIcon, t: 'Daily campaigns', b: 'Any video type for your product — how-to, marketing, demos, explainers, testimonials — rendered on autopilot and posted daily. $149 a month.' },
             ].map((s) => (
               <Card key={s.t} sx={{ height: '100%' }}>
                 <CardContent sx={{ p: 3 }}>
