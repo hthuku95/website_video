@@ -98,21 +98,39 @@ export function VideosPage() {
 
                   <Box sx={{ mt: 'auto', pt: 1.5 }}>
                     {v.status === 'completed' && v.output_r2_url ? (
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        size="small"
-                        onClick={() => setPreview(v)}
-                      >
-                        Play video
-                      </Button>
+                      <>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          size="small"
+                          onClick={() => setPreview(v)}
+                          sx={{ mb: 1 }}
+                        >
+                          Play video
+                        </Button>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          size="small"
+                          component="a"
+                          href={`/delivery/${v.id}`}
+                        >
+                          View delivery page
+                        </Button>
+                      </>
                     ) : v.status === 'failed' ? (
                       <Typography variant="body2" color="error" sx={{ fontSize: '0.8rem' }} noWrap>
                         {v.error_message || 'Render failed'}
                       </Typography>
                     ) : (
-                      <Button fullWidth variant="outlined" size="small" disabled>
-                        {v.status === 'running' ? 'Rendering...' : 'Queued'}
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        component="a"
+                        href={`/delivery/${v.id}`}
+                      >
+                        {v.status === 'running' ? 'View progress' : 'View queue status'}
                       </Button>
                     )}
                   </Box>
