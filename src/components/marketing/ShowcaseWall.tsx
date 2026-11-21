@@ -8,12 +8,6 @@ import { AutoVideo } from './AutoVideo';
 import { getShowcase, type ShowcaseScene } from '@/services/showcase.service';
 import { PATHS } from '@/routes/paths';
 
-/**
- * Showcase wall (higgsfield "preset wall" pattern): a dense grid of real
- * generated scene clips, autoplaying when scrolled into view, each with its
- * theme tag. A single conversion CTA — "Make mine" — ties the wall to the
- * generator. Renders nothing when empty so pages stay clean pre-population.
- */
 export function ShowcaseWall({
   title = 'Made with Video Sync',
   subtitle = 'Every clip below was generated end-to-end by the platform — research, script, voiceover, motion, render.',
@@ -31,8 +25,15 @@ export function ShowcaseWall({
     let alive = true;
     getShowcase().then((d) => {
       if (!alive) return;
+      // dedupe by url so the wall never shows the same clip twice
+      const seen = new Set<string>();
+      const unique = (d.scenes ?? []).filter((s) => {
+        if (!s?.url || seen.has(s.url)) return false;
+        seen.add(s.url);
+        return true;
+      });
       // mix orientations for a fuller wall, portrait-heavy sources included
-      const mixed = [...d.scenes].sort((a, b) => {
+      const mixed = [...unique].sort((a, b) => {
         if (a.orientation !== b.orientation) return a.orientation === 'portrait' ? -1 : 1;
         return a.source.localeCompare(b.source);
       });
@@ -62,15 +63,25 @@ export function ShowcaseWall({
             sm: 'repeat(3, 1fr)',
             md: 'repeat(4, 1fr)',
           },
-          gridAutoRows: '1fr',
         }}
       >
         {scenes.map((s) => (
-          <Box key={s.url} sx={{ position: 'relative', '&:hover .scene-tag': { opacity: 1 } }}>
+          <Box
+            key={s.url}
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 3,
+              bgcolor: 'background.paper',
+              '&:hover .scene-tag': { opacity: 1 },
+            }}
+          >
             <AutoVideo
               src={s.url}
               sx={{
                 aspectRatio: s.orientation === 'portrait' ? '9 / 14' : '16 / 9',
+                width: '100%',
+                display: 'block',
               }}
             />
             <Chip
