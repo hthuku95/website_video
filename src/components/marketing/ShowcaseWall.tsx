@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { AutoVideo } from './AutoVideo';
 import { getShowcase, type ShowcaseScene } from '@/services/showcase.service';
 import { PATHS } from '@/routes/paths';
@@ -25,14 +26,12 @@ export function ShowcaseWall({
     let alive = true;
     getShowcase().then((d) => {
       if (!alive) return;
-      // dedupe by url so the wall never shows the same clip twice
       const seen = new Set<string>();
       const unique = (d.scenes ?? []).filter((s) => {
         if (!s?.url || seen.has(s.url)) return false;
         seen.add(s.url);
         return true;
       });
-      // mix orientations for a fuller wall, portrait-heavy sources included
       const mixed = [...unique].sort((a, b) => {
         if (a.orientation !== b.orientation) return a.orientation === 'portrait' ? -1 : 1;
         return a.source.localeCompare(b.source);
@@ -73,17 +72,47 @@ export function ShowcaseWall({
               overflow: 'hidden',
               borderRadius: 3,
               bgcolor: 'background.paper',
+              aspectRatio: s.orientation === 'portrait' ? '9 / 14' : '16 / 9',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
+              },
               '&:hover .scene-tag': { opacity: 1 },
+              '&:hover .play-btn': { opacity: 1, transform: 'translate(-50%, -50%) scale(1.05)' },
             }}
           >
             <AutoVideo
               src={s.url}
               sx={{
-                aspectRatio: s.orientation === 'portrait' ? '9 / 14' : '16 / 9',
                 width: '100%',
+                height: '100%',
                 display: 'block',
               }}
             />
+            {/* play affordance — signals playable media, centered */}
+            <Box
+              className="play-btn"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 48,
+                height: 48,
+                borderRadius: '50%',
+                bgcolor: 'rgba(11,11,20,0.6)',
+                backdropFilter: 'blur(4px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0,
+                transition: 'opacity 0.25s, transform 0.25s',
+                pointerEvents: 'none',
+              }}
+            >
+              <PlayArrowRoundedIcon sx={{ fontSize: 28, color: 'common.white', ml: 0.5 }} />
+            </Box>
             <Chip
               className="scene-tag"
               label={s.title}
@@ -112,3 +141,4 @@ export function ShowcaseWall({
     </Box>
   );
 }
+
