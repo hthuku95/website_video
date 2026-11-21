@@ -26,10 +26,12 @@ export function ShowcaseWall({
     let alive = true;
     getShowcase().then((d) => {
       if (!alive) return;
+      // dedupe by title so the wall shows distinct video types, not 7 copies
+      // of the same clip (backend returns 35 scenes = 5 variants x 7 each)
       const seen = new Set<string>();
       const unique = (d.scenes ?? []).filter((s) => {
-        if (!s?.url || seen.has(s.url)) return false;
-        seen.add(s.url);
+        if (!s?.url || !s?.title || seen.has(s.title)) return false;
+        seen.add(s.title);
         return true;
       });
       const mixed = [...unique].sort((a, b) => {
